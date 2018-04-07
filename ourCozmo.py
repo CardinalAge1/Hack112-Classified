@@ -12,7 +12,7 @@ def cozmo_right(robot: cozmo.robot.Robot):
 
 
 def cozmo_straight(robot: cozmo.robot.Robot):
-    robot.drive_straight(distance_mm(150), speed_mmps(5000)
+    robot.drive_straight(distance_mm(90), speed_mmps(5000)
                          ).wait_for_completed()
 
 

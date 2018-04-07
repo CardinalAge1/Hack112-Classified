@@ -2,7 +2,7 @@ import ourCozmo
 
 
 def isLeft(lines, left, right, orientation):
-    wallDist = 50
+    wallDist = 20
     if orientation == 0:  # up
         for line in lines:
             if (min(line[0][1], line[1][1]) <= left[1]
@@ -28,7 +28,7 @@ def isLeft(lines, left, right, orientation):
 
 
 def isRight(lines, left, right, orientation):
-    wallDist = 50
+    wallDist = 20
     if orientation == 0:
         for line in lines:
             if (min(line[0][1], line[1][1]) <= right[1]
@@ -56,8 +56,8 @@ def isRight(lines, left, right, orientation):
 
 
 def isFront(lines, left, right, orientation):
-    wallDist = 50
-    middle = (left[0] + right[0] / 2, left[1] + right[1] / 2)
+    wallDist = 20
+    middle = ((left[0] + right[0]) / 2, (left[1] + right[1]) / 2)
     if orientation == 0:
         for line in lines:
             if (min(line[0][0], line[1][0]) <= middle[0]

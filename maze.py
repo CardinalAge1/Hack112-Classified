@@ -11,9 +11,9 @@ class Struct(object):
 
 
 data = Struct()
-data.orientation = 1
+data.orientation = 0
 
-video = cv.VideoCapture(0)
+video = cv.VideoCapture(-1)
 
 tracker_types = ['BOOSTING', 'MIL', 'KCF', 'TLD', 'MEDIANFLOW', 'GOTURN']
 tracker_type = tracker_types[2]
@@ -26,14 +26,15 @@ if tracker_type == 'KCF':
 if tracker_type == 'TLD':
     tracker = cv.TrackerTLD_create()
 if tracker_type == 'MEDIANFLOW':
-    tracker = cv.TrackerMedianFlow_create()
+    tracker = cv.TrackerMedian
+    Flow_create()
 if tracker_type == 'GOTURN':
     tracker = cv.TrackerGOTURN_create()
 # Define an initial bounding box
 boundingBox = (287, 23, 86, 320)
 
 ok, frame = video.read()
-
+ok, frame = video.read()
 # Uncomment the line below to select a different bounding box
 boundingBox = cv.selectROI(frame, False)
 
@@ -50,7 +51,7 @@ while True:
     # Copy edges tos the images that will display the results in BGR
     houghProb = cv.cvtColor(edge, cv.COLOR_GRAY2BGR)
 
-    linesProb = cv.HoughLinesP(edge, 1, np.pi / 180, 50, None, 50, 10)
+    linesProb = cv.HoughLinesP(edge, 1, np.pi / 180, 50, None, 75, 10)
     if trackOk:
         trackPoint1 = (int(bbox[0]), int(bbox[1]))
         trackPoint2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
@@ -69,34 +70,46 @@ while True:
     if linesProb is not None:
         for i in range(0, len(linesProb)):
             l = linesProb[i][0]
-            if (trackPoint1[0] < l[0] < trackPoint2[0] and trackPoint1[0] < l[2] < trackPoint2[0]) or\
-                    (trackPoint1[1] < l[1] < trackPoint2[1] and trackPoint1[1] < l[3] < trackPoint2[1]):
-                continue
+            if trackOk:
+                if (trackPoint1[0] < l[0] < trackPoint2[0] and trackPoint1[0] < l[2] < trackPoint2[0]) or\
+                        (trackPoint1[1] < l[1] < trackPoint2[1] and trackPoint1[1] < l[3] < trackPoint2[1]):
+                    continue
             linesSet.add(((l[0], l[1]), (l[2], l[3])))
             cv.line(src, (l[0], l[1]), (l[2], l[3]),
                     (0, 0, 255), 3, cv.LINE_AA)
             cv.line(houghProb, (l[0], l[1]), (l[2], l[3]),
                     (0, 0, 255), 3, cv.LINE_AA)
-
+            """
+    if trackOk:
+        if data.orientation == 0:
+            left = trackPoint1
+            right = (trackPoint2[0], trackPoint1[1])
+            cv.circle(src, right, 5, (255, 255, 0))
+            cv.circle(src, left, 5, (0, 255, 0))
+        elif data.orientation == 1:
+            left = (trackPoint2[0], trackPoint1[1])
+            right = trackPoint2
+            cv.circle(src, right, 5, (255, 255, 0))
+            cv.circle(src, left, 5, (0, 255, 0))
+        elif data.orientation == 2:
+            left = trackPoint2
+            right = (trackPoint1[0], trackPoint2[1])
+            cv.circle(src, right, 5, (255, 255, 0))
+            cv.circle(src, left, 5, (0, 255, 0))
+        else:
+            left = (trackPoint1[0], trackPoint2[1])
+            right = trackPoint1
+            cv.circle(src, right, 5, (255, 255, 0))
+            cv.circle(src, left, 5, (0, 255, 0))
+        print("moving...", end="")
+        data.orientation = solveMaze.solveMazeLeft(
+            linesSet, left, right, data.orientation)
+        print("motion complete")
+        """
     cv.imshow("Source", src)
     cv.imshow("Detected Lines (in red) - Probabilistic Line Transform", houghProb)
-
     keyPressed = cv.waitKey(1) & 0xff
     if keyPressed == 27:
         break
 video.release()
 cv.destroyAllWindows()
-
-"""if data.orientation == 0:
-    left = trackPoint1
-    right = (trackPoint2[0], trackPoint1[1])
-elif data.orientation == 1:
-    left = (trackPoint2[0], trackPoint1[1])
-    right = trackPoint2
-elif data.orientation == 2:
-    left = trackPoint2
-    right = (trackPoint1[0], trackPoint2[1])
-else:
-    left = (trackPoint1[0], trackPoint2[1])
-    right = trackPoint1
-data.orientation = solveMaze(linesSet, left, right, data.orientation)"""
