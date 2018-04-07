@@ -22,7 +22,7 @@ def cozmo_deadend(robot: cozmo.robot.Robot):
 
 def run(type):
     if type == "straight":
-        cozmo.run_program(cozmo_drive)
+        cozmo.run_program(cozmo_straight)
     if type == "left":
         cozmo.run_program(cozmo_left)
     if type == "right":
