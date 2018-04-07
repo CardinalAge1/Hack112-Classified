@@ -1,8 +1,18 @@
 import pygame
 
+"""
+Notes:
+
+- Fix mouseReleased
+- Fix color of main menu
+- Get buttons working (aka just put in thousands of flags)
+- Get a display going for the actual gameplay (w the cameras)
+- Put in mechanisms for winning (flag triggered by cozmo probably)
+- Game over screen
+"""
+
+
 # From Lukas Peraza's blog post!
-
-
 class CozmoMaze(object):
 
     def isKeyPressed(self, key):
@@ -32,6 +42,14 @@ class CozmoMaze(object):
         if self.menu:
             self.gameDisplay.fill((100, 100, 100))
             messageDisplay("Welcome to Cozmo Race!", (255, 0, 0))
+        if self.gameOver:
+            self.gameDisplay.fill((100, 100, 100))
+
+            ###########################
+            # Insert which player won!
+            ###########################
+
+            messageDisplay("Game over!", (255, 0, 0))
 
     def run(self):
 
