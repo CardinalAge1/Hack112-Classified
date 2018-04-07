@@ -1,4 +1,3 @@
-
 import cv2
 import sys
 
@@ -10,7 +9,7 @@ if __name__ == '__main__':
     # Instead of MIL, you can also use
 
     tracker_types = ['BOOSTING', 'MIL', 'KCF', 'TLD', 'MEDIANFLOW', 'GOTURN']
-    tracker_type = tracker_types[4]
+    tracker_type = tracker_types[2]
 
     if int(minor_ver) < 3:
         tracker = cv2.Tracker_create(tracker_type)
@@ -91,3 +90,5 @@ if __name__ == '__main__':
         # Exit if ESC pressed
         k = cv2.waitKey(1) & 0xff
         if k == 27: break
+video.release()
+cv2.destroyAllWindows()
